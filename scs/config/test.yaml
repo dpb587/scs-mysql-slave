@@ -21,16 +21,21 @@ config:
       sync_binlog: '6'
       thread_cache_size: '8'
       thread_stack: '192K'
+requires:
+  master:
+    method: etcd_watch
+    options:
+      path: '%(SCS_RUN_ZONE)s/service-locator/%(SCS_ENVIRONMENT)s/%(SCS_SERVICE)s/mysql-master/mysql'
 volumes:
   data:
     method: local
     options:
-      path: /tmp/scs-test/data
+      path: /tmp/scs-mysql-slave/data
   binlog:
     method: local
     options:
-      path: /tmp/scs-test/binlog
+      path: /tmp/scs-mysql-slave/binlog
   replaylog:
     method: local
     options:
-      path: /tmp/scs-test/replaylog
+      path: /tmp/scs-mysql-slave/replaylog

@@ -6,11 +6,11 @@ set -e
 
 IFS=':' read SCS_REQUIRES_MASTER_HOST SCS_REQUIRES_MASTER_PORT SCS_REQUIRES_MASTER_EXTRA <<< "$SCS_REQUIRES_MASTER"
 
-if ( `mysql -e 'SHOW SLAVE STATUS' | grep Master_Host` 2>&1 >/dev/null ) ; then
+if ( mysql -e 'SHOW SLAVE STATUS' | grep Master_Host 2>&1 >/dev/null ) ; then
     mysql -e 'STOP SLAVE'
 fi
 
-cat | mysql <<EOF
+mysql << EOF
 CHANGE MASTER TO MASTER_HOST='$SCS_REQUIRES_MASTER_HOST', MASTER_PORT=$SCS_REQUIRES_MASTER_PORT, MASTER_USER='<%= scope['master_username'] %>', MASTER_PASSWORD='<%= scope['master_password'] %>';
 EOF
 
