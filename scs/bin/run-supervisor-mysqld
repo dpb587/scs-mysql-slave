@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+/scs/scs/bin/run-supervisor-mysqld-postload &
+
+exec /usr/local/bin/pidproxy /scs/var/run/mysqld/mysqld.pid /usr/bin/mysqld_safe --defaults-file=/scs/etc/mysqld/mysqld.ini

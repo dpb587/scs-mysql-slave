@@ -1,0 +1,22 @@
+about:
+  title: MySQL Database Slave Server
+docker:
+  from: 'ubuntu:precise'
+provides:
+  mysql:
+    description: MySQL Connection
+    port: 3306
+requires:
+  master:
+    description: MySQL Database Master Server
+    liveupdate: /scs/bin/update-requires-master
+volumes:
+  binlog:
+    description: Binary Log Storage
+  data:
+    description: Database Storage
+  replaylog:
+    description: Replay Log Storage
+services:
+  mysql:
+    description: MySQL Slave Server
