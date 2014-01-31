@@ -2,6 +2,11 @@ source:
     type: local
 config:
   main:
+    serverid: '12345'
+    super_username: 'root'
+    super_password: 'password'
+    master_username: 'root'
+    master_password: 'password'
     mysqld_options:
       expire_logs_days: '7'
       key_buffer_size: '16M'

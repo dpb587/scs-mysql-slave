@@ -108,6 +108,10 @@ class scs (
             ensure => file,
             content => template('scs/mysqld/supervisor.conf.erb'),
             ;
+        "/scs/etc/supervisor.d/mysqld-postload.conf" :
+            ensure => file,
+            content => template('scs/mysqld/supervisor-postload.conf.erb'),
+            ;
         "/scs/var/log/mysqld" :
             ensure => directory,
             owner => 'scs',

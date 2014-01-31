@@ -2,7 +2,7 @@
 
 echo 'mysqld is not yet ready...'
 
-until ( echo 'SHOW STATUS' | mysql 2>&1 > /dev/null ) ; do sleep 2 ; done
+until ( mysql -e 'SHOW STATUS' 2>&1 > /dev/null ) ; do sleep 2 ; done
 
 echo 'mysqld is ready'
 
