@@ -5,6 +5,6 @@ set -e
 chown -R scs:scs /scs-mnt/binlog
 chown -R scs:scs /scs-mnt/replaylog
 chown -R scs:scs /scs-mnt/data
-[ ! -e /scs-mnt/mysqld/mysql ] && /usr/bin/mysql_install_db --defaults-file=/scs/etc/mysqld/mysqld.ini
+[ ! -e /scs-mnt/data/mysql ] && /usr/bin/mysql_install_db --defaults-file=/scs/etc/mysqld/mysqld.ini
 
 exec /usr/local/bin/supervisord -c /scs/etc/supervisor.conf

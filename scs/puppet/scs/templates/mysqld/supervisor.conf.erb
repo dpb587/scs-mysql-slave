@@ -1,5 +1,5 @@
 [program:mysqld]
-command = /scs/scs/bin/run-supervisor-mysqld
+command = /usr/local/bin/pidproxy /scs/var/run/mysqld/mysqld.pid /usr/bin/mysqld_safe --defaults-file=/scs/etc/mysqld/mysqld.ini
 stdout_logfile = /scs/var/log/supervisord/%(program_name)s-stdout.log
 stderr_logfile = /scs/var/log/supervisord/%(program_name)s-stderr.log
 stopwaitsecs = 30
