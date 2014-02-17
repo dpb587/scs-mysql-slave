@@ -10,7 +10,7 @@ relay_log_index = /scs-mnt/replaylog/index
 server_id = <%= scope['serverid'] %>
 skip_slave_start
 
-<% scope['replicate'].each do | v | -%>
+<% scope['replicate'].each do | k, v | -%>
 replicate-do-db = <%= v %>
 <% end %>
 
