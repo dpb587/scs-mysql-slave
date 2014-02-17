@@ -6,12 +6,20 @@ set -e
 
 IFS=':' read SCS_REQUIRE_MYSQL_HOST SCS_REQUIRE_MYSQL_PORT SCS_REQUIRE_MYSQL_EXTRA <<< "$SCS_REQUIRE_MYSQL"
 
-if ( mysql -e 'SHOW SLAVE STATUS' | grep Master_Host 2>&1 >/dev/null ) ; then
+EXTRA_MASTER=''
+SLAVE_STATUS=$(mysql -e 'SHOW SLAVE STATUS' --vertical)
+
+if ( echo $SLAVE_STATUS | grep Master_Host 2>&1 >/dev/null ) ; then
     mysql -e 'STOP SLAVE'
+
+    MASTER_LOG_FILE=$(echo $SLAVE_STATUS | sed -r 's/.*Relay_Master_Log_File: ([^ ]+).*/\1/')
+    MASTER_LOG_POS=$(echo $SLAVE_STATUS | sed -r 's/.*Exec_Master_Log_Pos: ([^ ]+).*/\1/')
+
+    EXTRA_MASTER=", MASTER_LOG_FILE='$MASTER_LOG_FILE', MASTER_LOG_POS=$MASTER_LOG_POST"
 fi
 
 mysql << EOF
-CHANGE MASTER TO MASTER_HOST='$SCS_REQUIRE_MYSQL_HOST', MASTER_PORT=$SCS_REQUIRE_MYSQL_PORT, MASTER_USER='<%= scope['master_username'] %>', MASTER_PASSWORD='<%= scope['master_password'] %>';
+CHANGE MASTER TO MASTER_HOST='$SCS_REQUIRE_MYSQL_HOST', MASTER_PORT=$SCS_REQUIRE_MYSQL_PORT, MASTER_USER='<%= scope['master_username'] %>', MASTER_PASSWORD='<%= scope['master_password'] %>'$EXTRA_MASTER;
 EOF
 
 mysql -e 'START SLAVE'

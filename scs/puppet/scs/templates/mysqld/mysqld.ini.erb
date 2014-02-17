@@ -8,6 +8,7 @@ socket = /scs/var/run/mysqld/mysqld.sock
 relay_log = /scs-mnt/replaylog/relaylog
 relay_log_index = /scs-mnt/replaylog/index
 server_id = <%= scope['serverid'] %>
+read_only
 skip_slave_start
 
 <% scope['replicate'].each do | k, v | -%>
