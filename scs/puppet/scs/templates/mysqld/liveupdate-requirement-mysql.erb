@@ -4,6 +4,8 @@
 
 set -e
 
+export HOME=/root
+
 if [ '' == "$SCS_REQUIRE_MYSQL" ]; then
     mysql -e 'STOP SLAVE'
 
