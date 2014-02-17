@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export HOME=/root
+
+mysql --batch -e 'SHOW MASTER STATUS' --vertical | grep -v '^*' | awk '{ print "Master_" $1 " " $2 }'
+mysql --batch -e 'SHOW SLAVE STATUS' --vertical | grep -v '^*' | awk '{ print "Slave_" $1 " " $2 }'

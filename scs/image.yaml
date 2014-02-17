@@ -9,10 +9,10 @@ dependency:
       description: MySQL Connection
       port: 3306
   require:
-    master:
-      description: MySQL Database Master Server
+    mysql:
+      description: MySQL Master Server
       liveupdate:
-        command: /scs/bin/liveupdate-require-master
+        command: /scs/bin/liveupdate-requirement-mysql
   volume:
     binlog:
       description: Binary Log Storage

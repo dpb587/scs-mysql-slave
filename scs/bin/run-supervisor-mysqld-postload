@@ -1,9 +1,11 @@
 #!/bin/bash
 
+export HOME=/root
+
 echo 'mysqld is not yet ready...'
 
 until ( mysql -e 'SHOW STATUS' 2>&1 > /dev/null ) ; do sleep 2 ; done
 
 echo 'mysqld is ready'
 
-/scs/bin/update-requires-master
+/scs/bin/liveupdate-requirement-mysql
