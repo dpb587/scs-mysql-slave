@@ -1,41 +1,42 @@
-source:
-    type: git
-    url: file:///vagrant/scs-mysql-slave
-config:
-  main:
-    serverid: '12345'
-    super_username: 'replsuper'
-    super_password: 'password'
-    master_username: 'replslave'
-    master_password: 'password'
-    mysqld_options:
-      expire_logs_days: '7'
-      key_buffer_size: '16M'
-      max_allowed_packet: '16M'
-      max_binlog_size: '256M'
-      max_connections: '256'
-      myisam_recover_options: 'BACKUP'
-      query_cache_limit: '1M'
-      query_cache_size: '64M'
-      symbolic_links: '0'
-      sync_binlog: '6'
-      thread_cache_size: '8'
-      thread_stack: '192K'
-requires:
-  master:
-    method: etcd_watch
-    options:
-      path: '%(SCS_RUN_ZONE)s/service-locator/%(SCS_ENVIRONMENT)s/%(SCS_SERVICE)s/mysql-master/mysql'
-volumes:
-  data:
-    method: local
-    options:
-      path: /tmp/scs-mysql-slave/data
-  binlog:
-    method: local
-    options:
-      path: /tmp/scs-mysql-slave/binlog
-  replaylog:
-    method: local
-    options:
-      path: /tmp/scs-mysql-slave/replaylog
+image:
+  source:
+      type: git
+      uri: file:///vagrant/scs-mysql-slave
+  engine:
+    method: docker
+  config:
+    main:
+      serverid: '12345'
+      super_username: 'replsuper'
+      super_password: 'password'
+      master_username: 'replslave'
+      master_password: 'password'
+      mysqld_options:
+        expire_logs_days: '7'
+        key_buffer_size: '16M'
+        max_allowed_packet: '16M'
+        max_binlog_size: '256M'
+        max_connections: '256'
+        myisam_recover_options: 'BACKUP'
+        query_cache_limit: '1M'
+        query_cache_size: '64M'
+        symbolic_links: '0'
+        sync_binlog: '6'
+        thread_cache_size: '8'
+        thread_stack: '192K'
+container:
+  name:
+    environment: dev
+    service: scs-mysql-slave
+    role: test
+  dependency:
+    require:
+      master:
+        method: disco
+    volume:
+      data:
+        method: local
+      binlog:
+        method: local
+      replaylog:
+        method: local
