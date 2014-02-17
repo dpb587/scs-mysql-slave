@@ -67,7 +67,7 @@ class scs (
             ;
         "/scs/bin/liveupdate-requirement-mysql" :
             ensure => file,
-            content => template('scs/mysqld/liveupdate-requirement-mysql.sh.erb'),
+            content => template('scs/mysqld/liveupdate-requirement-mysql.erb'),
             mode => 500,
             ;
 
