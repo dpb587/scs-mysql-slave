@@ -1,6 +1,8 @@
 engine:
   docker:
     from: 'ubuntu:precise'
+config:
+  method: puppet
 dependency:
   provide:
     mysql:
