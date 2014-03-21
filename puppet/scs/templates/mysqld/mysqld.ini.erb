@@ -1,0 +1,20 @@
+[mysqld]
+datadir = /mnt/data
+user = scs
+log_bin = /mnt/binlog/binlog
+log_error = /var/log/mysqld/error.log
+pid_file = /var/run/mysqld/mysqld.pid
+socket = /var/run/mysqld/mysqld.sock
+relay_log = /mnt/replaylog/relaylog
+relay_log_index = /mnt/replaylog/index
+server_id = <%= scope['serverid'] %>
+read_only
+skip_slave_start
+
+<% scope['replicate'].each do | k, v | -%>
+replicate-do-db = <%= v %>
+<% end %>
+
+<% scope['mysqld_options'].each do | k, v | -%>
+<%= k %> = <%= v %>
+<% end %>

@@ -29,14 +29,13 @@ container:
     environment: dev
     service: scs-mysql-slave
     role: test
-  dependency:
-    require:
-      master:
-        method: disco
-    volume:
-      data:
-        method: local
-      binlog:
-        method: local
-      replaylog:
-        method: local
+  require:
+    master:
+      method: disco
+  volume:
+    data:
+      method: local
+    binlog:
+      method: local
+    replaylog:
+      method: local

@@ -1,0 +1,32 @@
+engine:
+  docker:
+    from: 'scs-base'
+config:
+  method: puppet
+provide:
+  mysql:
+    description: MySQL Connection
+    port: 3306
+require:
+  mysql:
+    description: MySQL Master Server
+    liveupdate:
+      command: /usr/bin/scs-liveupdate-mysql
+volume:
+  binlog:
+    description: Binary Log Storage
+  data:
+    description: Database Storage
+  replaylog:
+    description: Replay Log Storage
+logs:
+  - path: /var/log/mysqld/error.log
+    type: mysqld-error
+  - path: /var/log/supervisor/mysqld-stdout.log
+    type: mysqld-stdout
+  - path: /var/log/supervisor/mysqld-stderr.log
+    type: mysqld-stderr
+  - path: /var/log/supervisor/mysqld-postload-stdout.log
+    type: generic
+  - path: /var/log/supervisor/mysqld-postload-stderr.log
+    type: generic

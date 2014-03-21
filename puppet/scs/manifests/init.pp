@@ -7,25 +7,6 @@ class scs (
     $replicate = [],
     $mysqld_options = {},
 ) {
-    group {
-        'scs' :
-            ensure => present,
-            gid => 1010,
-            ;
-    }
-
-    user {
-        'scs' :
-            ensure => present,
-            gid => 1010,
-            shell => '/bin/false',
-            uid => 1010,
-            require => [
-                Group['scs'],
-            ],
-            ;
-    }
-
     exec {
         'apt-source:percona:key' :
             command => '/usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1C4CBDCDCD2EFD2A',
@@ -43,12 +24,6 @@ class scs (
                 Exec['apt-source:percona'],
             ],
             ;
-        '/usr/bin/easy_install supervisor' :
-            creates => '/usr/bin/supervisord',
-            require => [
-                Package['python-setuptools'],
-            ],
-            ;
     }
 
     file {
@@ -62,70 +37,60 @@ class scs (
             target => '/dev/null',
             ;
 
-        "/scs/bin" :
-            ensure => directory,
-            ;
-        "/scs/bin/liveupdate-requirement-mysql" :
+        '/usr/bin/scs-runtime-hook-start' :
             ensure => file,
-            content => template('scs/mysqld/liveupdate-requirement-mysql.erb'),
+            source => 'puppet:///modules/scs/scs-runtime-hook-start',
+            owner => root,
+            group => root,
+            mode => 0755,
+            ;
+        "/usr/bin/scs-liveupdate-mysql" :
+            ensure => file,
+            content => template('scs/mysqld/liveupdate-mysql.erb'),
             mode => 500,
             ;
-
-        "/scs/etc" :
-            ensure => directory,
-            ;
-        "/scs/etc/supervisor.conf" :
+        '/usr/bin/scs-supervisor-mysqld-postload' :
             ensure => file,
-            content => template('scs/supervisor/supervisor.conf.erb'),
+            source => 'puppet:///modules/scs/scs-supervisor-mysqld-postload',
+            owner => root,
+            group => root,
+            mode => 0755,
             ;
-        "/scs/etc/supervisor.d" :
-            ensure => directory,
-            ;
-        "/scs/var" :
-            ensure => directory,
-            ;
-        "/scs/var/log" :
-            ensure => directory,
-            ;
-        "/scs/var/log/supervisord" :
-            ensure => directory,
-            ;
-        "/scs/var/run" :
-            ensure => directory,
-            ;
-        "/scs/var/run/supervisord" :
-            ensure => directory,
+        '/usr/bin/scs-util-mysqld-status' :
+            ensure => file,
+            source => 'puppet:///modules/scs/scs-util-mysqld-status',
+            owner => root,
+            group => root,
+            mode => 0755,
             ;
 
-        "/scs/etc/mysqld" :
+        "/etc/mysqld" :
             ensure => directory,
             ;
-        "/scs/etc/mysqld/mysqld.ini" :
+        "/etc/mysqld/mysqld.ini" :
             ensure => file,
             content => template('scs/mysqld/mysqld.ini.erb'),
             ;
-        "/scs/etc/supervisor.d/mysqld.conf" :
+        "/etc/supervisor.d/mysqld.conf" :
             ensure => file,
             content => template('scs/mysqld/supervisor.conf.erb'),
             ;
-        "/scs/etc/supervisor.d/mysqld-postload.conf" :
+        "/etc/supervisor.d/mysqld-postload.conf" :
             ensure => file,
             content => template('scs/mysqld/supervisor-postload.conf.erb'),
             ;
-        "/scs/var/log/mysqld" :
+        "/var/log/mysqld" :
             ensure => directory,
             owner => 'scs',
             group => 'scs',
+            require => [
+                Package['percona-server-server-5.6'],
+            ],
             ;
-        "/scs/var/run/mysqld" :
+        "/var/run/mysqld" :
             ensure => directory,
             owner => 'scs',
             group => 'scs',
-            ;
-        '/var/run/mysqld/mysqld.sock' :
-            backup => false,
-            ensure => link,
-            target => '/scs/var/run/mysqld/mysqld.sock',
             require => [
                 Package['percona-server-server-5.6'],
             ],
@@ -137,12 +102,6 @@ class scs (
             ensure => installed,
             require => [
                 Exec['apt-source:percona'],
-                Exec['apt-update'],
-            ],
-            ;
-        'python-setuptools' :
-            ensure => installed,
-            require => [
                 Exec['apt-update'],
             ],
             ;

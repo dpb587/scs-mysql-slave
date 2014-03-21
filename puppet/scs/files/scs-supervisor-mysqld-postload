@@ -8,4 +8,4 @@ until ( mysql -e 'SHOW STATUS' 2>&1 > /dev/null ) ; do sleep 2 ; done
 
 echo 'mysqld is ready'
 
-/scs/bin/liveupdate-requirement-mysql
+/usr/bin/scs-liveupdate-mysql

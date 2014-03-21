@@ -1,0 +1,6 @@
+[program:mysqld-postload]
+command = /usr/bin/scs-supervisor-mysqld-postload
+stdout_logfile = /var/log/supervisor/mysqld-postload-stdout.log
+stderr_logfile = /var/log/supervisor/mysqld-postload-stderr.log
+stopwaitsecs = 30
+autorestart = false

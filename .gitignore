@@ -1,6 +1,2 @@
-/bin
-/etc
-/mnt
-/scs/runtime
-/var
-/Dockerfile
+/compiled.json
+/docker.cid
