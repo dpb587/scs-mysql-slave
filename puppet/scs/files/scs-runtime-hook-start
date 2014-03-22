@@ -5,4 +5,4 @@ set -e
 chown -R scs:scs /mnt/binlog
 chown -R scs:scs /mnt/replaylog
 chown -R scs:scs /mnt/data
-[ ! -e /mnt/data/mysql ] && /usr/bin/mysql_install_db --defaults-file=/etc/mysqld/mysqld.ini
+[[ -d /mnt/data/mysql ]] || /usr/bin/mysql_install_db --defaults-file=/etc/mysqld/mysqld.ini
